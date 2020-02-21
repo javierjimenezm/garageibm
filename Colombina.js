@@ -1,19 +1,22 @@
-const express = require('express');
-var http = require('http');
-const path = require('path');
-const app = express()
+const express = require("express");
+var http = require("http");
+const path = require("path");
+const app = express();
 const router = express.Router();
 
-var http = require('http');
-var server = http.createServer(app);
-
-server.listen(8080);
+// configuracion de cloud foundry
+var cfenv = require("cfenv");
+var appEnv = cfenv.getAppEnv();
+app.listen(appEnv.port, "0.0.0.0", function() {
+  console.log("server node starting on " + appEnv.url);
+});
 
 app.use(express.static(path.join(__dirname)));
 
-
-app.use(router.get('/', function (req, res){
-    res.sendFile('./index.html');
-}))
+app.use(
+  router.get("/", function(req, res) {
+    res.sendFile("./index.html");
+  })
+);
 
 module.exports = app;
